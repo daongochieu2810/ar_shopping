@@ -6,11 +6,17 @@ import {
   Image,
   Text,
 } from "react-native";
-import { ViroARSceneNavigator } from "react-viro";
+import {
+  ViroARSceneNavigator,
+  ViroARScene,
+  ViroAmbientLight,
+  Viro3DObject,
+} from "react-viro";
 var sharedProps = {
   apiKey: "API_KEY_HERE",
 };
 import PlayScene from "./PlayScene";
+import GirlScene from "./GirlScene";
 
 const styles = StyleSheet.create({
   root: {
@@ -36,6 +42,7 @@ const styles = StyleSheet.create({
 const states = {
   MENU: "MENU",
   PLAY: "PLAY",
+  RENDER: "RENDER",
 };
 
 class MainScene extends Component {
@@ -57,7 +64,12 @@ class MainScene extends Component {
             source={require("./assets/target.jpg")}
             style={{ width: 300, height: 300 }}
           />
-          <Text style={{ fontSize: 30 }}>PLAY</Text>
+          <Text style={{ fontSize: 30 }}>PLAY REVERSI</Text>
+        </View>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={this.handleSetAppState(states.RENDER)}>
+        <View style={styles.playButton}>
+          <Text style={{ fontSize: 30 }}>RENDER</Text>
         </View>
       </TouchableHighlight>
     </View>
@@ -65,6 +77,7 @@ class MainScene extends Component {
 
   renderPlay = () => this.renderARPortal(PlayScene);
 
+  renderObject = () => this.renderARPortal(GirlScene);
   renderAppState = () => {
     const { appState } = this.state;
 
@@ -73,6 +86,8 @@ class MainScene extends Component {
         return this.renderMenu();
       case states.PLAY:
         return this.renderPlay();
+      case states.RENDER:
+        return this.renderObject();
       default:
         return null;
     }
